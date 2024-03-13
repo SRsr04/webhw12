@@ -22,8 +22,15 @@ class UserBase(BaseModel):
 class UserCreate(UserBase):
     password: str
 
+class VerifyEmailToken(BaseModel):
+    sub: str  
+
+class ResetPasswordToken(BaseModel):
+    sub: str 
+
 class User(UserBase):
     id: int
+    avatar_url: str = None
 
     class Config:
         orm_mode = True

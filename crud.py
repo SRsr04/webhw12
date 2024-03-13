@@ -5,6 +5,7 @@ from fastapi import Depends, HTTPException
 from models import User
 from schemas import UserCreate
 
+
 from database import SessionLocal
 from models import Contact
 from schemas import ContactCreate, ContactResponse
@@ -58,3 +59,9 @@ def upcoming_birthdays(db: Session = Depends(SessionLocal)):
         (Contact.birthday >= date.today()) & (Contact.birthday <= end_date)
     ).all()
     return contacts
+
+def update_user_avatar(db: Session, user_id: int, avatar_url: str):
+    user = db.query(User).filter(User.id == user_id).first()
+    if user:
+        user.avatar_url = avatar_url
+        db.commit()
