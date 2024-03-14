@@ -2,9 +2,7 @@ from fastapi import APIRouter, Depends, HTTPException, status
 from fastapi.security import OAuth2PasswordRequestForm
 from jwt import encode, decode, PyJWTError
 from datetime import datetime, timedelta
-
 from pydantic import ValidationError
-
 from database import SessionLocal
 from crud import create_user, get_user_by_email, verify_password, update_user_avatar, update_user_password
 from dependencies import get_current_user, verify_email_token
@@ -69,6 +67,16 @@ def update_avatar(avatar_url: str, current_user: User = Depends(get_current_user
 
 @router.post("/reset-password/")
 def reset_password(token: str, new_password: str, db: SessionLocal = Depends()): # type: ignore
+    """
+    Reset the user's password using the reset password token.
+
+    Parameters:
+    - token (str): The reset password token sent to the user's email.
+    - new_password (str): The new password to set.
+
+    Returns:
+    - dict: A dictionary with a message indicating the success of the password reset.
+    """
     try:
         payload = decode(token, Settings.secret_key, algorithms=["HS256"])
         token_data = ResetPasswordToken(**payload)

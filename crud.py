@@ -65,3 +65,20 @@ def update_user_avatar(db: Session, user_id: int, avatar_url: str):
     if user:
         user.avatar_url = avatar_url
         db.commit()
+
+def update_user_password(db: Session, user_id: int, new_password: str):
+    """
+    Update the user's password.
+
+    Parameters:
+    - db (Session): Database session.
+    - user_id (int): User ID.
+    - new_password (str): New password.
+
+    Returns:
+    - None
+    """
+    user = db.query(User).filter(User.id == user_id).first()
+    if user:
+        user.password = new_password
+        db.commit()
